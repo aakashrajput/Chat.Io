@@ -1,6 +1,6 @@
 Chat.Io
 ========================================================================
-
+Feel free to Contribute.
 
 Introduction
 ------------------------------------------------------------------------
@@ -44,6 +44,10 @@ Screenshot
 ------------------------------------------------------------------------
 
 ![alt text](https://i.imgur.com/nyrNYo1.png)
+
+![alt text](https://i.imgur.com/yA4XjZX.png)
+
+![alt text](https://i.imgur.com/Dvg8EjC.png)
 
 
 License
