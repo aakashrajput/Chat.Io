@@ -39,6 +39,13 @@ You can also specify a port:
 
 Visit your server at `http://SERVER:3000`
 
+
+Screenshot
+------------------------------------------------------------------------
+
+![alt text](https://i.imgur.com/nyrNYo1.png)
+
+
 License
 ------------------------------------------------------------------------
 
