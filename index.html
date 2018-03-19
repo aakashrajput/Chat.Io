@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Io.Chat</title>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<style>
+
+		* {
+  box-sizing: border-box;
+}
+
+html {
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+html, input {
+  font-family:
+    "HelveticaNeue-Light",
+    "Helvetica Neue Light",
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    "Lucida Grande",
+    sans-serif;
+}
+
+html, body {
+	background-color:#000;
+  height: 100%;
+  margin: 30px;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+  word-wrap: break-word;
+}
+
+/* Pages */
+
+.pages {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.page {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+/* Login Page */
+
+.login.page {
+  background-color: #000;
+}
+
+.login.page .form {
+  height: 100px;
+  margin-top: -100px;
+  position: absolute;
+
+  text-align: center;
+  top: 50%;
+  width: 100%;
+}
+
+.login.page .form .usernameInput {
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid #fff;
+  outline: none;
+  padding-bottom: 15px;
+  text-align: center;
+  width: 400px;
+}
+
+.login.page .title {
+  font-size: 200%;
+}
+
+.login.page .ltitle {
+  font-size: 150%;
+  color: #fff;
+  font-weight: 100;
+}
+
+.login.page .usernameInput {
+  font-size: 200%;
+  letter-spacing: 3px;
+}
+
+.login.page .title, .login.page .usernameInput {
+  color: #fff;
+  font-weight: 100;
+}
+
+ 
+
+		
+
+		#messageArea{
+			display:none;
+		}
+
+
+	</style>
+</head>
+<body>
+	<div class="conatiner">
+		<div id="userFormArea" class="row">
+			<div class="col-md-12 login page">
+				<form id="userForm">
+					<div class="form-group form">
+						<h1 class="credi title">Welcome to Io.Chat a Node.js Chat Server </h1>
+						<h3 class="title">What's your nickname?</h3>
+						<input class="usernameInput" id="username" />
+						<br />
+						<div type="submit" class="" value=""></div>
+						<br><br><br><br><br>
+						<kbd>Created By <a href="https://github.com/aakashrajput/">@aakashsingh</a></kbd>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="login page" id="messageArea" class="row">
+			<div class="col-md-4">
+				<div class="well">
+					<h3>Users Online</h3>
+					<ul class="list-group" id="users"></ul>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="chat" id="chat"></div>
+
+				<form id="messageForm">
+					<div class="form-group">
+						<label class="ltitle">Enter Message</label>
+						<textarea class="form-control" id="message"></textarea>
+						<br />
+						<input type="submit" class="btn btn-primary" value="Send Message" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(function(){
+			var socket = io.connect();
+			var $messageForm = $('#messageForm');
+			var $message = $('#message');
+			var $chat = $('#chat');
+			var $userFormArea = $('#userFormArea');
+			var $messageArea = $('#messageArea');
+			var $userForm = $('#userForm');
+			var $users = $('#users');
+			var $username = $('#username');
+			var COLORS = [
+						    '#e21400', '#91580f', '#f8a700', '#f78b00',
+						    '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
+						    '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+						  ];
+			
+
+			
+			 
+
+			$messageForm.submit(function(e){
+				e.preventDefault();
+				socket.emit('send message', $message.val());
+				$message.val('');
+
+
+			});
+
+			$userForm.submit(function(e){
+				e.preventDefault();
+				socket.emit('new user', $username.val(), function(data){
+					if(data){
+						$userFormArea.hide();
+						$messageArea.show();
+					}
+				});
+				$username.val('');
+
+
+			});
+            
+            socket.on('new message', function(data){
+            	
+            	$chat.append('<div class="well"><strong">'+data.user+':</strong>\n' + data.msg +'</div>');
+            });
+
+            socket.on('get user',function(data){
+            	var html='';
+            	for(i=0;i<data.length;i++){
+            		html += '<li class="list-group-item">'+data[i]+'</li>';
+
+            	}
+            	$users.html(html);
+            });
+
+
+		});
+	</script>
+</body>
+</html>
