@@ -170,7 +170,19 @@ ul {
 			
 
 			
-			 
+			  var COLORS = function(str) {
+				    var hash = 0;
+				    for (var i = 0; i < str.length; i++) {
+				        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+				    }
+				    var colour = '#';
+				    for (var i = 0; i < 3; i++) {
+				        var value = (hash >> (i * 8)) & 0xFF;
+				        colour += ('00' + value.toString(16)).substr(-2);
+				    }
+				    return colour;
+				}
+
 
 			$messageForm.submit(function(e){
 				e.preventDefault();
@@ -194,8 +206,8 @@ ul {
 			});
             
             socket.on('new message', function(data){
-            	
-            	$chat.append('<div class="well"><strong">'+data.user+':</strong>\n' + data.msg +'</div>');
+            	let userColor = COLORS(""+data.user+"");
+            	$chat.append('<div class="well"><strong style="color:'+userColor +';">'+data.user+':</strong>\n' + data.msg +'</div>');
             });
 
             socket.on('get user',function(data){
